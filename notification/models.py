@@ -216,15 +216,6 @@ def get_notification_language(user):
     LanguageStoreNotAvailable if this site does not use translated
     notifications.
     """
-    if getattr(settings, 'NOTIFICATION_LANGUAGE_MODULE', False):
-        try:
-            app_label, model_name = settings.NOTIFICATION_LANGUAGE_MODULE.split('.')
-            model = models.get_model(app_label, model_name)
-            language_model = model._default_manager.get(user__id__exact=user.id)
-            if hasattr(language_model, 'language'):
-                return language_model.language
-        except (ImportError, ImproperlyConfigured, model.DoesNotExist):
-            raise LanguageStoreNotAvailable
     raise LanguageStoreNotAvailable
 
 def get_formatted_messages(formats, label, context):
